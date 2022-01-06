@@ -2,8 +2,8 @@
 from enum import Enum
 import inspect
 import numpy as np
-from ._integrators import *
-from . import _helpers as helpers
+from .integrators import *
+from . import helpers as helpers
 
 
 class Integrators(Enum):
