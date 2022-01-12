@@ -1,6 +1,7 @@
 # NumIntegrator
 [![PyPI Latest Release](https://img.shields.io/pypi/v/numintegrator.svg)](https://pypi.org/project/numintegrator/)
 [![Package Status](https://img.shields.io/pypi/status/numintegrator.svg)](https://pypi.org/project/numintegrator/)
+[![Downloads](https://pepy.tech/badge/numintegrator)](https://pepy.tech/project/numintegrator)
 [![License](https://img.shields.io/pypi/l/numintegrator.svg)](https://github.com/Armin-Ariamajd/numintegrator/blob/main/LICENSE)
 
 NumIntegrator provides numerical integration methods for solving differential equations.
