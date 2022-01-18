@@ -42,7 +42,9 @@ def create_t_series(t0, dt=None, n_steps=None, tn=None):
     sum_none = sum(map(lambda val: val is None, [dt, n_steps, tn]))
     if isinstance(dt, (list, np.ndarray)):
         if sum_none != 2:
-            raise ValueError("When dx is provided as an array, `n_steps` and `tn` should not be provided.")
+            raise ValueError(
+                "When dx is provided as an array, `n_steps` and `tn` should not be provided."
+            )
         else:
             dt_array = np.array(dt)
             if len(dt.shape) != 1:
@@ -93,7 +95,3 @@ def create_t_series(t0, dt=None, n_steps=None, tn=None):
             dt_last = tn - tn_
             dt_array[-1] = dt_last
     return t, dt_array
-
-
-
-

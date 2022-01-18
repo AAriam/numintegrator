@@ -28,7 +28,7 @@ def runge_kutta_order4(f, x, t, dt, **kwargs):
 
 def euler_implicit(f, x, t, dt, explicit_integrator, tolerance, **kwargs):
     for n in range(len(dt)):
-        explicit_integrator(f, x[n:n + 2], t[n:n + 2], dt[n:n + 1], **kwargs)
+        explicit_integrator(f, x[n : n + 2], t[n : n + 2], dt[n : n + 1], **kwargs)
         f1 = f(x[n + 1], t[n + 1], **kwargs)
         x_next_old = np.array(x[n + 1])
         x[n + 1][...] = x[n] + f1 * dt[n]
@@ -41,7 +41,7 @@ def euler_implicit(f, x, t, dt, explicit_integrator, tolerance, **kwargs):
 
 def crank_nicolson(f, x, t, dt, explicit_integrator, tolerance, **kwargs):
     for n in range(len(dt)):
-        explicit_integrator(f, x[n:n + 2], t[n:n + 2], dt[n:n + 1], **kwargs)
+        explicit_integrator(f, x[n : n + 2], t[n : n + 2], dt[n : n + 1], **kwargs)
         f1 = f(x[n], t[n], **kwargs)
         f2 = f(x[n + 1], t[n + 1], **kwargs)
         x_next_old = np.array(x[n + 1])
@@ -56,7 +56,7 @@ def crank_nicolson(f, x, t, dt, explicit_integrator, tolerance, **kwargs):
 
 def midpoint_rule(f, x, t, dt, explicit_integrator, tolerance, **kwargs):
     for n in range(len(dt)):
-        explicit_integrator(f, x[n:n + 2], t[n:n + 2], dt[n:n + 1], **kwargs)
+        explicit_integrator(f, x[n : n + 2], t[n : n + 2], dt[n : n + 1], **kwargs)
         f1 = f((x[n] + x[n + 1]) / 2, (t[n] + t[n + 1]) / 2, **kwargs)
         x_next_old = np.array(x[n + 1])
         x[n + 1][...] = x[n] + f1 * dt[n]
@@ -100,8 +100,8 @@ def velocity_verlet_explicit_ode2(f, x, v, t, dt, **kwargs):
 
 
 def leapfrog_yoshida_order4(f, x, v, t, dt, **kwargs):
-    w0 = -(2 ** (1 / 3)) / (2 - 2 ** (1/3))
-    w1 = 1 / (2 - 2 ** (1/3))
+    w0 = -(2 ** (1 / 3)) / (2 - 2 ** (1 / 3))
+    w1 = 1 / (2 - 2 ** (1 / 3))
     c1 = c4 = w1 / 2
     c2 = c3 = (w0 + w1) / 2
     d1 = d3 = w1

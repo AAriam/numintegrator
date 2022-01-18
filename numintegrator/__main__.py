@@ -9,20 +9,55 @@ from . import helpers as helpers
 class Integrators(Enum):
     ODE_1_EXPLICIT_EULER = {"ode_order": 1, "implicit": False, "func": euler_explicit}
     ODE_1_EXPLICIT_HEUN = {"ode_order": 1, "implicit": False, "func": heun_explicit}
-    ODE_1_EXPLICIT_RUNGE_KUTTA_ORDER4 = {"ode_order": 1, "implicit": False, "func": runge_kutta_order4}
+    ODE_1_EXPLICIT_RUNGE_KUTTA_ORDER4 = {
+        "ode_order": 1,
+        "implicit": False,
+        "func": runge_kutta_order4,
+    }
 
     ODE_1_IMPLICIT_EULER = {"ode_order": 1, "implicit": True, "func": euler_implicit}
-    ODE_1_IMPLICIT_CRANK_NICOLSON = {"ode_order": 1, "implicit": True, "func": crank_nicolson}
+    ODE_1_IMPLICIT_CRANK_NICOLSON = {
+        "ode_order": 1,
+        "implicit": True,
+        "func": crank_nicolson,
+    }
     ODE_1_IMPLICIT_MIDPOINT = {"ode_order": 1, "implicit": True, "func": midpoint_rule}
 
-    ODE_2_EXPLICIT_EULER = {"ode_order": 2, "implicit": False, "func": euler_explicit_ode2}
-    ODE_2_EXPLICIT_VERLET = {"ode_order": 2, "implicit": False, "func": verlet_explicit_ode2}
-    ODE_2_EXPLICIT_VELOCITY_VERLET = {"ode_order": 2, "implicit": False, "func": velocity_verlet_explicit_ode2}
-    ODE_2_EXPLICIT_YOSHIDA_LEAPFROG_ORDER4 = {"ode_order": 2, "implicit": False, "func": leapfrog_yoshida_order4}
+    ODE_2_EXPLICIT_EULER = {
+        "ode_order": 2,
+        "implicit": False,
+        "func": euler_explicit_ode2,
+    }
+    ODE_2_EXPLICIT_VERLET = {
+        "ode_order": 2,
+        "implicit": False,
+        "func": verlet_explicit_ode2,
+    }
+    ODE_2_EXPLICIT_VELOCITY_VERLET = {
+        "ode_order": 2,
+        "implicit": False,
+        "func": velocity_verlet_explicit_ode2,
+    }
+    ODE_2_EXPLICIT_YOSHIDA_LEAPFROG_ORDER4 = {
+        "ode_order": 2,
+        "implicit": False,
+        "func": leapfrog_yoshida_order4,
+    }
 
 
-def integrate(integrator, f, x0, v0=None, t0=0, dt=None, n_steps=None, tn=None,
-              explicit_integrator=Integrators.ODE_1_EXPLICIT_EULER, tolerance=None, **kwargs):
+def integrate(
+    integrator,
+    f,
+    x0,
+    v0=None,
+    t0=0,
+    dt=None,
+    n_steps=None,
+    tn=None,
+    explicit_integrator=Integrators.ODE_1_EXPLICIT_EULER,
+    tolerance=None,
+    **kwargs,
+):
     """
     Solve (system of) 1st or 2nd-order ordinary differential equation
     using a numerical integrator.
@@ -105,15 +140,20 @@ def integrate(integrator, f, x0, v0=None, t0=0, dt=None, n_steps=None, tn=None,
     # and if it has more, verify that they are provided as kwargs
     f_sig = inspect.signature(f)
     f_non_default_args = [
-        name for name, value in f_sig.parameters.items()
+        name
+        for name, value in f_sig.parameters.items()
         if value.default is inspect.Parameter.empty
     ]
     if len(f_non_default_args) < 2:
-        raise ValueError("Input function must accept at least two non-default arguments.")
+        raise ValueError(
+            "Input function must accept at least two non-default arguments."
+        )
     elif len(f_non_default_args) > 2:
         for arg in f_non_default_args[2:]:
             if arg not in kwargs:
-                raise ValueError(f"Non-default argument {arg} in the input function not provided.")
+                raise ValueError(
+                    f"Non-default argument {arg} in the input function not provided."
+                )
     else:
         # the function has exactly two non-default arguments
         pass
@@ -126,7 +166,9 @@ def integrate(integrator, f, x0, v0=None, t0=0, dt=None, n_steps=None, tn=None,
     elif integrator.value["ode_order"] == 2:
         # verify that v0 is provided:
         if v0 is None:
-            raise ValueError("For integrators of 2nd-order ODEs `v0` should be provided.")
+            raise ValueError(
+                "For integrators of 2nd-order ODEs `v0` should be provided."
+            )
         # verify that v0 and x0 have the same shape:
         else:
             v0 = np.array(v0)
@@ -142,14 +184,23 @@ def integrate(integrator, f, x0, v0=None, t0=0, dt=None, n_steps=None, tn=None,
     # If the integration method is implicit (for 1st-order ODE),
     elif integrator.value["implicit"]:
         # verify that a second explicit method is provided
-        if explicit_integrator not in Integrators or explicit_integrator.value["implicit"]:
-            raise ValueError("Implicit integrator requires a second explicit integrator to be provided.")
+        if (
+            explicit_integrator not in Integrators
+            or explicit_integrator.value["implicit"]
+        ):
+            raise ValueError(
+                "Implicit integrator requires a second explicit integrator to be provided."
+            )
             # verify that `tolerance` is provided:
         elif tolerance is None:
-            raise ValueError("For implicit integrators, `tolerance` should be provided.")
+            raise ValueError(
+                "For implicit integrators, `tolerance` should be provided."
+            )
         # everything is okay; call the integrator
         else:
-            integrator.value["func"](f, x, t, dt, explicit_integrator.value["func"], tolerance, **kwargs)
+            integrator.value["func"](
+                f, x, t, dt, explicit_integrator.value["func"], tolerance, **kwargs
+            )
 
     # The integrator should then be an explicit method for 1st-order ODE
     else:
